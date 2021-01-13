@@ -1,3 +1,7 @@
+# Build instructions ESP8266 (Docker)
+
+(Maxim Kulkin edited this page on 10 Nov 2020 · 6 revisions)
+
 Here is build setup that I use. Note that you need Docker, python2.7 and python `pip` tool installed.
 
 1. Create an empty directory and change into it.
