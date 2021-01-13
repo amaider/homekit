@@ -1,6 +1,6 @@
 # Build instructions ESP8266 (Docker)
 
-(Maxim Kulkin edited this page on 10 Nov 2020 · 6 revisions)
+* [Maxim Kulkin edited this page on 10 Nov 2020 · 6 revisions](https://github.com/maximkulkin/esp-homekit-demo/wiki/Build-instructions-ESP8266-(Docker))
 
 Here is build setup that I use. Note that you need Docker, python2.7 and python `pip` tool installed.
 
