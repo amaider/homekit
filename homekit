@@ -1,0 +1,49 @@
+#!/bin/bash
+#save in a directory(example: /bin/) of PATH (Terminal: "echo $PATH")
+#usage: homekit -a
+NOCOLOR='\033[0m'       # ${NOCOLOR}
+RED='\033[0;31m'        # ${RED}
+ORANGE='\033[0;33m'     #	${ORANGE}
+GREEN='\033[0;32m'      #	${GREEN}
+
+export SDK_PATH="~/git/homekit/esp-open-rtos/"
+export ESPPORT=/dev/tty.SLAB_USBtoUART
+NAME=${PWD##*/}
+
+while getopts ":efmrx:" opt; do
+  case $opt in
+    x)
+      NAME=$OPTARG
+      ;;
+    r)
+      echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"
+      rm -R ./build
+      rm -R ./firmware
+      echo -e "${ORANGE}building project${NOCOLOR}"
+      cd ../../
+      docker run -it --rm -v "$(pwd)":/project -w /project esp-rtos make -C amaider_examples/$NAME all
+      ;;
+    e)
+      echo -e "${ORANGE}erase flash${NOCOLOR}"
+      make -C ../../amaider_examples/$NAME erase_flash
+      ;;
+    f)
+      echo -e "${ORANGE}flash with monitor${NOCOLOR}"
+      make -C ../../amaider_examples/$NAME flash monitor
+      ;;
+    m)
+      echo -e "${ORANGE}monitor${NOCOLOR}"
+      make -C ../../amaider_examples/$NAME monitor
+      ;;
+    \?)
+      echo "Invalid option: -$OPTARG" >&2
+      exit 1
+      ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+      ;;
+    e)
+
+  esac
+done

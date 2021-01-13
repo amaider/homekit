@@ -1,0 +1,6 @@
+[submodule "esp-open-rtos"]
+	path = esp-open-rtos
+	url = https://github.com/SuperHouse/esp-open-rtos.git
+[submodule "esp-homekit-demo"]
+	path = esp-homekit-demo
+	url = https://github.com/maximkulkin/esp-homekit-demo.git
