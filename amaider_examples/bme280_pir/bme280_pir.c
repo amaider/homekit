@@ -26,6 +26,8 @@ static void wifi_init() {
 /*
  * BME280
  */
+#include "i2c/i2c.h"
+#include "bmp280/bmp280.h"
 const uint8_t i2c_bus = 0;
 const uint8_t scl_pin = 5;
 const uint8_t sda_pin = 4;
@@ -68,9 +70,8 @@ void bmp280_sensor_task(void *pvParameters) {
 /*
  * PIR Sensor
  */
-#ifndef SENSOR_PIN 0
-#error SENSOR_PIN is not specified
-#endif
+#include "../../esp-homekit-demo/components/common/button/toggle.h"
+#define SENSOR_PIN 0
 
 homekit_characteristic_t occupancy_detected = HOMEKIT_CHARACTERISTIC_(OCCUPANCY_DETECTED, 0);
 

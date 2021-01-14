@@ -13,9 +13,7 @@
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "PIR.c: ", ## __VA_ARGS__);
 
-#ifndef SENSOR_PIN 0
-#error SENSOR_PIN is not specified
-#endif
+#define SENSOR_PIN 0
 
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
