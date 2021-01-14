@@ -13,7 +13,9 @@
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "PIR.c: ", ## __VA_ARGS__);
 
-#define SENSOR_GPIO = 5;
+#ifndef SENSOR_PIN 0
+#error SENSOR_PIN is not specified
+#endif
 
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
@@ -61,7 +63,7 @@ homekit_server_config_t config = {
 
 void user_init(void) {
     wifi_init();
-    if (toggle_create(SENSOR_GPIO, sensor_callback, NULL)) {
+    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
         printf("Failed to initialize sensor\n");
     }
     homekit_server_init(&config);
