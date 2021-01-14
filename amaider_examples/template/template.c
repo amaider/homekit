@@ -8,7 +8,7 @@
 
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
-#include "wifi.h"
+#include "../../esp-homekit-demo/wifi.h"
 
 
 static void wifi_init() {
