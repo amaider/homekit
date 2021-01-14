@@ -2,9 +2,9 @@ PROGRAM = template
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \
-	$(abspath ../../components/esp8266-open-rtos/cJSON) \
-	$(abspath ../../components/common/wolfssl) \
-	$(abspath ../../components/common/homekit)
+	$(abspath ../../esp-homekit-demo/components/esp8266-open-rtos/cJSON) \
+	$(abspath ../../esp-homekit-demo/components/common/wolfssl) \
+	$(abspath ../../esp-homekit-demo/components/common/homekit)
 
 FLASH_SIZE ?= 32
 
