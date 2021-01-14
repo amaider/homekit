@@ -10,8 +10,6 @@
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
 
-#define LED_INBUILT_GPIO 2
-
 #include "espressif/esp_common.h"   //do i need this?
 
 #include "i2c/i2c.h"
