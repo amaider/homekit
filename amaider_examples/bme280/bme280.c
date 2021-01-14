@@ -10,12 +10,14 @@
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
 
-#include "espressif/esp_common.h"   //do i need this?
-
-#include "i2c/i2c.h"
-#include "bmp280/bmp280.h"
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "bme280.c: ", ## __VA_ARGS__);
+
+/*
+ * BME280
+ */
+#include "i2c/i2c.h"
+#include "bmp280/bmp280.h"
 
 const uint8_t i2c_bus = 0;
 const uint8_t scl_pin = 5;
@@ -37,16 +39,16 @@ void bmp280_sensor_task(void *pvParameters) {
 
     while (1) {
         while (!bmp280_init(&bmp280_dev, &params)) {
-            printf("BMP280 initialization failed\n");
+            debug("BMP280 initialization failed\n");
             vTaskDelay(1000 / portTICK_PERIOD_MS);
         }
         while(1) {
             vTaskDelay(1000 / portTICK_PERIOD_MS);
             if (!bmp280_read_float(&bmp280_dev, &temperature_value, &pressure_value, &humidity_value)) {
-                printf("Temperature/pressure reading failed\n");
+                debug("Temperature/pressure reading failed\n");
                 break;
             }
-            //printf("Humidity: %.2f Pa, Temperature: %.2f C\n", humidity_value, temperature_value);
+            //debug("Humidity: %.2f Pa, Temperature: %.2f C\n", humidity_value, temperature_value);
             temperature.value.float_value = temperature_value;
             humidity.value.float_value = humidity_value;
             homekit_characteristic_notify(&temperature, HOMEKIT_FLOAT(temperature_value));
@@ -56,6 +58,9 @@ void bmp280_sensor_task(void *pvParameters) {
     }
 }
 
+/*
+ * homekit accessories
+ */
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_thermostat, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
@@ -82,6 +87,9 @@ homekit_accessory_t *accessories[] = {
     NULL
 };
 
+/*
+ * inits
+ */
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
         .ssid = WIFI_SSID,

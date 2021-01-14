@@ -12,17 +12,9 @@
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "template.c: ", ## __VA_ARGS__);
 
-static void wifi_init() {
-    struct sdk_station_config wifi_config = {
-        .ssid = WIFI_SSID,
-        .password = WIFI_PASSWORD,
-    };
-
-    sdk_wifi_set_opmode(STATION_MODE);
-    sdk_wifi_station_set_config(&wifi_config);
-    sdk_wifi_station_connect();
-}
-
+/*
+ * null_identify
+ */
 void null_identify_task(void *_args) {
     for (int i=0; i<3; i++) {
         for (int j=0; j<2; j++) {
@@ -41,10 +33,13 @@ void null_identify_task(void *_args) {
 }
 
 void null_identify(homekit_value_t _value) {
-    printf("ACCESSORY_INFORMATION identify\n");
+    debug("ACCESSORY_INFORMATION identify\n");
     xTaskCreate(null_identify_task, "LED identify", 128, NULL, 2, NULL);
 }
 
+/*
+ * homekit accessories
+ */
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
@@ -61,6 +56,20 @@ homekit_accessory_t *accessories[] = {
     }),
     NULL
 };
+
+/*
+ * inits
+ */
+static void wifi_init() {
+    struct sdk_station_config wifi_config = {
+        .ssid = WIFI_SSID,
+        .password = WIFI_PASSWORD,
+    };
+
+    sdk_wifi_set_opmode(STATION_MODE);
+    sdk_wifi_station_set_config(&wifi_config);
+    sdk_wifi_station_connect();
+}
 
 homekit_server_config_t config = {
     .accessories = accessories,
