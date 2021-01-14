@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "system_error": "c",
+        "__locale": "c",
+        "homekit.h": "c",
+        "characteristics.h": "c"
+    }
+}
