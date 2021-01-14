@@ -77,6 +77,7 @@ homekit_accessory_t *accessories[] = {
             &humidity,
             NULL
         }),
+        NULL
     }),
     NULL
 };
