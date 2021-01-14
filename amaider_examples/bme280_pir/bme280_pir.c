@@ -12,17 +12,6 @@
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "bme280_pir.c: ", ## __VA_ARGS__);
 
-static void wifi_init() {
-    struct sdk_station_config wifi_config = {
-        .ssid = WIFI_SSID,
-        .password = WIFI_PASSWORD,
-    };
-
-    sdk_wifi_set_opmode(STATION_MODE);
-    sdk_wifi_station_set_config(&wifi_config);
-    sdk_wifi_station_connect();
-}
-
 /*
  * BME280
  */
@@ -80,6 +69,9 @@ void sensor_callback(bool high, void *context) {
     homekit_characteristic_notify(&occupancy_detected, occupancy_detected.value);
 }
 
+/*
+ * homekit accessories
+ */
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
@@ -110,6 +102,20 @@ homekit_accessory_t *accessories[] = {
     }),
     NULL
 };
+
+/*
+ * inits
+ */
+static void wifi_init() {
+    struct sdk_station_config wifi_config = {
+        .ssid = WIFI_SSID,
+        .password = WIFI_PASSWORD,
+    };
+
+    sdk_wifi_set_opmode(STATION_MODE);
+    sdk_wifi_station_set_config(&wifi_config);
+    sdk_wifi_station_connect();
+}
 
 homekit_server_config_t config = {
     .accessories = accessories,
