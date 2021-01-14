@@ -47,7 +47,7 @@ homekit_accessory_t *accessories[] = {
             NULL
         }),
         HOMEKIT_SERVICE(OCCUPANCY_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Occupancy Sensor"),
+            HOMEKIT_CHARACTERISTIC(NAME, "PIR Sensor"),
             &occupancy_detected,
             NULL
         }),

@@ -1,4 +1,4 @@
-PROGRAM=bme280
+PROGRAM = bme280
 
 EXTRA_COMPONENTS = \
 	extras/i2c \

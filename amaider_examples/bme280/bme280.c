@@ -59,10 +59,10 @@ void bmp280_sensor_task(void *pvParameters) {
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_thermostat, .services=(homekit_service_t*[]) {
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "Temperature Sensor"),
+            HOMEKIT_CHARACTERISTIC(NAME, "Temperature & Humidity Sensor"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "0012345"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "Temperature&Humidity"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "BME280"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, NULL),
             NULL
