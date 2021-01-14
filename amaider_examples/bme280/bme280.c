@@ -17,6 +17,8 @@
 #include "i2c/i2c.h"
 #include "bmp280/bmp280.h"
 
+#define debug(fmt, ...) printf("%s" fmt "\n", "bme280.c: ", ## __VA_ARGS__);
+
 const uint8_t i2c_bus = 0;
 const uint8_t scl_pin = 5;
 const uint8_t sda_pin = 4;

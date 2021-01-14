@@ -10,6 +10,7 @@
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
 
+#define debug(fmt, ...) printf("%s" fmt "\n", "template.c: ", ## __VA_ARGS__);
 
 static void wifi_init() {
     struct sdk_station_config wifi_config = {

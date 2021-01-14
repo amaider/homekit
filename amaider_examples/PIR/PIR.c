@@ -11,6 +11,8 @@
 #include "../../esp-homekit-demo/wifi.h"
 #include "../../esp-homekit-demo/components/common/button/toggle.h"
 
+#define debug(fmt, ...) printf("%s" fmt "\n", "PIR.c: ", ## __VA_ARGS__);
+
 #define SENSOR_GPIO = 5;
 
 static void wifi_init() {
