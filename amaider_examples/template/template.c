@@ -37,6 +37,11 @@ void null_identify(homekit_value_t _value) {
     xTaskCreate(null_identify_task, "LED identify", 128, NULL, 2, NULL);
 }
 
+void switch_on_callback(homekit_characteristic_t *ch, homekit_value_t value, void *arg) {
+    
+    debug("%s", __func__);
+}
+
 /*
  * homekit accessories
  */
@@ -51,7 +56,10 @@ homekit_accessory_t *accessories[] = {
             HOMEKIT_CHARACTERISTIC(IDENTIFY, null_identify),
             NULL
         }),
-        
+        HOMEKIT_SERVICE(SWITCH, .primary = true, .characteristics = (homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
+            NULL
+        }),
         NULL
     }),
     NULL
