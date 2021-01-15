@@ -10,7 +10,16 @@
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
 
-#define debug(fmt, ...) printf("%s" fmt "\n", "Security_System_PIR.c: ", ## __VA_ARGS__);
+#define debug(fmt, ...) printf("%s" fmt "\n", "###Security_System_PIR.c: ", ## __VA_ARGS__);
+
+/*
+ * Security System
+ */
+homekit_characteristic_t current_state = HOMEKIT_CHARACTERISTIC_(SECURITY_SYSTEM_CURRENT_STATE, 0);
+void security_target_state_callback(homekit_characteristic_t *ch, homekit_value_t value, void *arg) {
+    homekit_characteristic_notify(&current_state, HOMEKIT_UINT8(value.int_value));
+    debug("%s: target_state=%i", __func__, value.int_value);
+}
 
 /*
  * homekit accessories
@@ -18,19 +27,17 @@
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "template"),
+            HOMEKIT_CHARACTERISTIC(NAME, "PIR Alarm"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "001"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "NodeMCU 1.0"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "HC-SR501"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, NULL),
             NULL
         }),
         HOMEKIT_SERVICE(SECURITY_SYSTEM, .primary = true, .characteristics = (homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(SECURITY_SYSTEM_CURRENT_STATE, 0),
-            HOMEKIT_CHARACTERISTIC(SECURITY_SYSTEM_TARGET_STATE, 0),
-            //HOMEKIT_CHARACTERISTIC(SECURITY_SYSTEM_CURRENT_STATE, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
-            //HOMEKIT_CHARACTERISTIC(SECURITY_SYSTEM_TARGET_STATE, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
+            &current_state,
+            HOMEKIT_CHARACTERISTIC(SECURITY_SYSTEM_TARGET_STATE, 3, .min_value = (float[]) {2}, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(security_target_state_callback)),
             HOMEKIT_CHARACTERISTIC(NAME, "PIR Alarm"),
             NULL
         }),
