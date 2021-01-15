@@ -39,7 +39,7 @@ void null_identify(homekit_value_t _value) {
 
 void switch_on_callback(homekit_characteristic_t *ch, homekit_value_t value, void *arg) {
     
-    debug("%s", __func__);
+    debug("%s: ", __func__);
 }
 
 /*
