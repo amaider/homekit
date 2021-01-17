@@ -30,7 +30,7 @@ void null_identify_task(void *_args) {
     vTaskDelete(NULL);
 }
 
-void null_identify(homekit_value_t _value) {
+void template_identify(homekit_value_t _value) {
     debug("ACCESSORY_INFORMATION identify\n");
     xTaskCreate(null_identify_task, "LED identify", 128, NULL, 2, NULL);
 }
@@ -55,10 +55,10 @@ homekit_accessory_t *accessories[] = {
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "001"),
             HOMEKIT_CHARACTERISTIC(MODEL, "NodeMCU 1.0"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1"),
-            HOMEKIT_CHARACTERISTIC(IDENTIFY, null_identify),
+            HOMEKIT_CHARACTERISTIC(IDENTIFY, template_identify),
             NULL
         }),
-        HOMEKIT_SERVICE(SWITCH, .primary = true, .characteristics = (homekit_characteristic_t*[]) {
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics = (homekit_characteristic_t*[]) {
             HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
             &characteristic,
             NULL
