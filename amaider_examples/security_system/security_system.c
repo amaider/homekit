@@ -1,3 +1,7 @@
+/*
+ * - temperature and humidity charactersitics (BME280)
+ * - activate PIR sensor by setting security system characteristic to night-(mode)
+ */
 #include <stdio.h>
 #include <espressif/esp_wifi.h>
 #include <espressif/esp_sta.h>
@@ -9,8 +13,9 @@
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
+#include "../../esp-homekit-demo/components/common/button/toggle.h"
 
-#define debug(fmt, ...) printf("%s" fmt "\n", "bme280_pir.c: ", ## __VA_ARGS__);
+#define debug(fmt, ...) printf("%s" fmt "\n", "###security_system.c: ", ## __VA_ARGS__);
 
 /*
  * BME280
@@ -46,7 +51,6 @@ void bme280_sensor_task(void *pvParameters) {
                 debug("Temperature/pressure reading failed\n");
                 break;
             }
-            //printf("Humidity: %.2f Pa, Temperature: %.2f C\n", humidity_value, temperature_value);
             temperature.value.float_value = temperature_value;
             humidity.value.float_value = humidity_value;
             homekit_characteristic_notify(&temperature, HOMEKIT_FLOAT(temperature_value));
@@ -61,23 +65,38 @@ void bme280_init() {
     xTaskCreate(bme280_sensor_task, "Temperature Sensor", 256, NULL, 2, NULL);
 }
 
+//homekit_characteristic_t current_state;
 /*
  * PIR Sensor
  */
-#include "../../esp-homekit-demo/components/common/button/toggle.h"
-#define SENSOR_PIN 14
+#define SENSOR_PIN 0
 
 homekit_characteristic_t occupancy_detected = HOMEKIT_CHARACTERISTIC_(OCCUPANCY_DETECTED, 0);
 
 void sensor_callback(bool high, void *context) {
     occupancy_detected.value = HOMEKIT_UINT8(high ? 1 : 0);
     homekit_characteristic_notify(&occupancy_detected, occupancy_detected.value);
+
+    //current_state.value = HOMEKIT_UINT8(high ? 4 : 2);
+    //homekit_characteristic_notify(&current_state, current_state.value);
+    //debug("%s: a=%i", __func__, current_state.value.int_value);
 }
 
-void pir_init() {
-    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
-        debug("Failed to initialize sensor\n");
+/*
+ * Security System
+ */
+homekit_characteristic_t current_state = HOMEKIT_CHARACTERISTIC_(SECURITY_SYSTEM_CURRENT_STATE, 3);
+void security_target_state_callback(homekit_characteristic_t *ch, homekit_value_t value, void *arg) {
+    if(value.int_value == 2) {
+        if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
+            debug("Failed to initialize sensor\n");
+        }
+    } else if(value.int_value == 3) {
+        toggle_delete(SENSOR_PIN);
+        debug("%s: toggle_delete", __func__);
     }
+    homekit_characteristic_notify(&current_state, HOMEKIT_UINT8(value.int_value));
+    debug("%s: notify current_state=%i", __func__, value.int_value);
 }
 
 /*
@@ -86,12 +105,23 @@ void pir_init() {
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "Temp, Hum, PIR Sensor"),
+            HOMEKIT_CHARACTERISTIC(NAME, "PIR Alarm"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "001"),
-            HOMEKIT_CHARACTERISTIC(MODEL, "BME280, HC-SR501"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "HC-SR501"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, NULL),
+            NULL
+        }),
+        HOMEKIT_SERVICE(SECURITY_SYSTEM, .primary = true, .characteristics = (homekit_characteristic_t*[]) {
+            &current_state,
+            HOMEKIT_CHARACTERISTIC(SECURITY_SYSTEM_TARGET_STATE, 3, .min_value = (float[]) {2}, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(security_target_state_callback)),
+            HOMEKIT_CHARACTERISTIC(NAME, "PIR Alarm"),
+            NULL
+        }),
+        HOMEKIT_SERVICE(OCCUPANCY_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "PIR Sensor"),
+            &occupancy_detected,
             NULL
         }),
         HOMEKIT_SERVICE(TEMPERATURE_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
@@ -102,16 +132,6 @@ homekit_accessory_t *accessories[] = {
         HOMEKIT_SERVICE(HUMIDITY_SENSOR, .characteristics=(homekit_characteristic_t*[]) {
             HOMEKIT_CHARACTERISTIC(NAME, "Humidity Sensor"),
             &humidity,
-            NULL
-        }),
-        HOMEKIT_SERVICE(OCCUPANCY_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "PIR Sensor"),
-            &occupancy_detected,
-            NULL
-        }),
-        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "Switch"),
-            HOMEKIT_CHARACTERISTIC(ON, false),
             NULL
         }),
         NULL
@@ -141,6 +161,5 @@ homekit_server_config_t config = {
 void user_init(void) {
     wifi_init();
     bme280_init();
-    pir_init();
     homekit_server_init(&config);
 }
