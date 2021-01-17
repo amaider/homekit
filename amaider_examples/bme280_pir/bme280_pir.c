@@ -37,13 +37,13 @@ void bmp280_sensor_task(void *pvParameters) {
 
     while (1) {
         while (!bmp280_init(&bmp280_dev, &params)) {
-            printf("BMP280 initialization failed\n");
+            debug("BMP280 initialization failed\n");
             vTaskDelay(1000 / portTICK_PERIOD_MS);
         }
         while(1) {
             vTaskDelay(1000 / portTICK_PERIOD_MS);
             if (!bmp280_read_float(&bmp280_dev, &temperature_value, &pressure_value, &humidity_value)) {
-                printf("Temperature/pressure reading failed\n");
+                debug("Temperature/pressure reading failed\n");
                 break;
             }
             //printf("Humidity: %.2f Pa, Temperature: %.2f C\n", humidity_value, temperature_value);
@@ -60,7 +60,7 @@ void bmp280_sensor_task(void *pvParameters) {
  * PIR Sensor
  */
 #include "../../esp-homekit-demo/components/common/button/toggle.h"
-#define SENSOR_PIN 0
+#define SENSOR_PIN 14
 
 homekit_characteristic_t occupancy_detected = HOMEKIT_CHARACTERISTIC_(OCCUPANCY_DETECTED, 0);
 
@@ -98,6 +98,11 @@ homekit_accessory_t *accessories[] = {
             &occupancy_detected,
             NULL
         }),
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics=(homekit_characteristic_t*[]){
+            HOMEKIT_CHARACTERISTIC(NAME, "Switch"),
+            HOMEKIT_CHARACTERISTIC(ON, false),
+            NULL
+        }),
         NULL
     }),
     NULL
@@ -106,6 +111,14 @@ homekit_accessory_t *accessories[] = {
 /*
  * inits
  */
+sensor_init() {
+    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
+        debug("Failed to initialize sensor\n");
+    }
+    i2c_init(i2c_bus, scl_pin, sda_pin, I2C_FREQ_400K);
+    xTaskCreate(bmp280_sensor_task, "Temperatore Sensor", 256, NULL, 2, NULL);
+}
+
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
         .ssid = WIFI_SSID,
@@ -124,10 +137,6 @@ homekit_server_config_t config = {
 
 void user_init(void) {
     wifi_init();
-    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
-        printf("Failed to initialize sensor\n");
-    }
+    sensor_init();
     homekit_server_init(&config);
-    i2c_init(i2c_bus, scl_pin, sda_pin, I2C_FREQ_400K);
-    xTaskCreate(bmp280_sensor_task, "Temperatore Sensor", 256, NULL, 2, NULL);
 }
