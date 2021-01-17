@@ -15,20 +15,18 @@
 /*
  * null_identify
  */
+#define LED_GPIO 2
 void null_identify_task(void *_args) {
     for (int i=0; i<3; i++) {
         for (int j=0; j<2; j++) {
-            led_write(true);
+            gpio_write(LED_GPIO, 1);
             vTaskDelay(100 / portTICK_PERIOD_MS);
-            led_write(false);
+            gpio_write(LED_GPIO, 0);
             vTaskDelay(100 / portTICK_PERIOD_MS);
         }
-
         vTaskDelay(250 / portTICK_PERIOD_MS);
     }
-
-    led_write(led_on);
-
+    gpio_write(LED_GPIO, 0);
     vTaskDelete(NULL);
 }
 
