@@ -25,8 +25,11 @@ float temperature_value, pressure_value, humidity_value;
 
 homekit_characteristic_t temperature = HOMEKIT_CHARACTERISTIC_(CURRENT_TEMPERATURE, 0);
 homekit_characteristic_t humidity    = HOMEKIT_CHARACTERISTIC_(CURRENT_RELATIVE_HUMIDITY, 0);
-
-void bmp280_sensor_task(void *pvParameters) {
+bme280_init() {
+    i2c_init(i2c_bus, scl_pin, sda_pin, I2C_FREQ_400K);
+    xTaskCreate(bme280_sensor_task, "Temperature Sensor", 256, NULL, 2, NULL);
+}
+void bme280_sensor_task(void *pvParameters) {
     bmp280_params_t  params;
 
     bmp280_init_default_params(&params);
@@ -63,7 +66,11 @@ void bmp280_sensor_task(void *pvParameters) {
 #define SENSOR_PIN 14
 
 homekit_characteristic_t occupancy_detected = HOMEKIT_CHARACTERISTIC_(OCCUPANCY_DETECTED, 0);
-
+pir_init() {
+    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
+        debug("Failed to initialize sensor\n");
+    }
+}
 void sensor_callback(bool high, void *context) {
     occupancy_detected.value = HOMEKIT_UINT8(high ? 1 : 0);
     homekit_characteristic_notify(&occupancy_detected, occupancy_detected.value);
@@ -111,14 +118,6 @@ homekit_accessory_t *accessories[] = {
 /*
  * inits
  */
-sensor_init() {
-    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
-        debug("Failed to initialize sensor\n");
-    }
-    i2c_init(i2c_bus, scl_pin, sda_pin, I2C_FREQ_400K);
-    xTaskCreate(bmp280_sensor_task, "Temperatore Sensor", 256, NULL, 2, NULL);
-}
-
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
         .ssid = WIFI_SSID,
@@ -137,6 +136,7 @@ homekit_server_config_t config = {
 
 void user_init(void) {
     wifi_init();
-    sensor_init();
+    bme280_init();
+    pir_init();
     homekit_server_init(&config);
 }
