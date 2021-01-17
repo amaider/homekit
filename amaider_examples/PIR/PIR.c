@@ -8,7 +8,7 @@
 #include "../../esp-homekit-demo/wifi.h"
 #include "../../esp-homekit-demo/components/common/button/toggle.h"
 
-#define debug(fmt, ...) printf("%s" fmt "\n", "PIR.c: ", ## __VA_ARGS__);
+#define debug(fmt, ...) printf("%s" fmt "\n", "pir.c: ", ## __VA_ARGS__);
 
 /*
  * PIR Sensor
