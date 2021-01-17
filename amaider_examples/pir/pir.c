@@ -22,6 +22,12 @@ void sensor_callback(bool high, void *context) {
     homekit_characteristic_notify(&occupancy_detected, occupancy_detected.value);
 }
 
+void pir_init() {
+    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
+        debug("Failed to initialize sensor\n");
+    }
+}
+
 /*
  * homekit accessories
  */
@@ -67,8 +73,6 @@ homekit_server_config_t config = {
 
 void user_init(void) {
     wifi_init();
-    if (toggle_create(SENSOR_PIN, sensor_callback, NULL)) {
-        debug("Failed to initialize sensor\n");
-    }
+    pir_init();
     homekit_server_init(&config);
 }
