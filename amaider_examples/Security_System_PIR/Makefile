@@ -1,8 +1,9 @@
-PROGRAM = Security_System_PIR
+PROGRAM = security_system_pir
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \
 	$(abspath ../../esp-homekit-demo/components/esp8266-open-rtos/cJSON) \
+	$(abspath ../../esp-homekit-demo/components/common/button) \
 	$(abspath ../../esp-homekit-demo/components/common/wolfssl) \
 	$(abspath ../../esp-homekit-demo/components/common/homekit)
 
