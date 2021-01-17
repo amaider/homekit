@@ -35,6 +35,9 @@ void template_identify(homekit_value_t _value) {
     xTaskCreate(null_identify_task, "LED identify", 128, NULL, 2, NULL);
 }
 
+/*
+ * Switch
+ */
 homekit_characteristic_t characteristic;
 
 void switch_on_callback(homekit_characteristic_t *ch, homekit_value_t value, void *arg) {
