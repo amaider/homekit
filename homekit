@@ -26,6 +26,7 @@ while getopts ":efmrx:" opt; do
     e)
       echo -e "${ORANGE}erase flash${NOCOLOR}"
       make -C ../../amaider_examples/$NAME erase_flash
+      exit
       ;;
     f)
       echo -e "${ORANGE}flash with monitor${NOCOLOR}"
