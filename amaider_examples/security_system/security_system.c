@@ -13,7 +13,6 @@
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
-#include "../../esp-homekit-demo/components/common/button/toggle.h"
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "###security_system.c: ", ## __VA_ARGS__);
 
@@ -69,6 +68,7 @@ void bme280_init() {
 /*
  * PIR Sensor
  */
+#include "../../esp-homekit-demo/components/common/button/toggle.h"
 #define SENSOR_PIN 0
 
 homekit_characteristic_t occupancy_detected = HOMEKIT_CHARACTERISTIC_(OCCUPANCY_DETECTED, 0);
