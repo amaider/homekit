@@ -8,6 +8,5 @@
     -f: flash
     -m: monitor
 # create QR-Code: 
-* https://www.studiopieters.nl/esp-homekit-sdk-qr-code/
+* https://github.com/maximkulkin/esp-homekit/blob/a4b8d3e8020c7af92d49ed7f2f35c461f1917d01/README.md
 * tools/gen_qrcode <ci=> <.password> <.setupId> qrcode.png
-* e.g. tools/gen_qrcode 5 123-45-678 1QJ8 qrcode.png
