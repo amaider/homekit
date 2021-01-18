@@ -51,7 +51,7 @@ homekit_characteristic_t characteristic = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 10
  * homekit accessories
  */
 homekit_accessory_t *accessories[] = {
-    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
+    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_template, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             HOMEKIT_CHARACTERISTIC(NAME, "template"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),

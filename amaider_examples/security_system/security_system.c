@@ -76,10 +76,12 @@ homekit_characteristic_t occupancy_detected = HOMEKIT_CHARACTERISTIC_(OCCUPANCY_
 void sensor_callback(bool high, void *context) {
     occupancy_detected.value = HOMEKIT_UINT8(high ? 1 : 0);
     homekit_characteristic_notify(&occupancy_detected, occupancy_detected.value);
+    debug("%s: notify: occupancy_detected=%i", __func__, occupancy_detected.value.int_value);
 
+    //if(high) {current_state.value = HOMEKIT_UINT8(4);}
     //current_state.value = HOMEKIT_UINT8(high ? 4 : 2);
     //homekit_characteristic_notify(&current_state, current_state.value);
-    //debug("%s: a=%i", __func__, current_state.value.int_value);
+    //debug("%s: notify: current_state=%i", __func__, current_state.value.int_value);
 }
 
 /*
@@ -103,7 +105,7 @@ void security_target_state_callback(homekit_characteristic_t *ch, homekit_value_
  * homekit accessories
  */
 homekit_accessory_t *accessories[] = {
-    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
+    HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_security_system, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
             HOMEKIT_CHARACTERISTIC(NAME, "PIR Alarm"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
@@ -155,7 +157,8 @@ static void wifi_init() {
 
 homekit_server_config_t config = {
     .accessories = accessories,
-    .password = "111-11-111"
+    .password = "111-11-111",
+    .setupId = "1QJ8"
 };
 
 void user_init(void) {
