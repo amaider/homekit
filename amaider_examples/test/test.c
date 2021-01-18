@@ -27,32 +27,44 @@ homekit_characteristic_t characteristic = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 10
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "test"),
-            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
+            HOMEKIT_CHARACTERISTIC(NAME, "id1"),
+            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "id1_man"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "001"),
             HOMEKIT_CHARACTERISTIC(MODEL, "NodeMCU 1.0"),
             HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.1"),
             HOMEKIT_CHARACTERISTIC(IDENTIFY, NULL),
             NULL
         }),
-        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics = (homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
-            HOMEKIT_CHARACTERISTIC(NAME, "switch1"),
-            NULL
-        }),
-        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics = (homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
-            HOMEKIT_CHARACTERISTIC(NAME, "switch2"),
-            NULL
-        }),
-        HOMEKIT_SERVICE(OCCUPANCY_SENSOR, .primary=true, .characteristics=(homekit_characteristic_t*[]) {
-            HOMEKIT_CHARACTERISTIC(NAME, "PIR Sensor"),
+        HOMEKIT_SERVICE(OCCUPANCY_SENSOR, .primary=false, .characteristics=(homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(NAME, "id1_occupancy"),
             HOMEKIT_CHARACTERISTIC(OCCUPANCY_DETECTED, 0),
             NULL
         }),
-        HOMEKIT_SERVICE(LIGHTBULB, .primary=true, .characteristics = (homekit_characteristic_t*[]) {
+        HOMEKIT_SERVICE(LIGHTBULB, .primary=false, .characteristics = (homekit_characteristic_t*[]) {
             HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
-            HOMEKIT_CHARACTERISTIC(NAME, "light1"),
+            HOMEKIT_CHARACTERISTIC(NAME, "id1_light"),
+            NULL
+        }),
+        NULL
+    }),
+    HOMEKIT_ACCESSORY(.id=2, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
+        HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
+            HOMEKIT_CHARACTERISTIC(NAME, "id2"),
+            HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
+            HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "002"),
+            HOMEKIT_CHARACTERISTIC(MODEL, "NodeMCU 1.0"),
+            HOMEKIT_CHARACTERISTIC(FIRMWARE_REVISION, "0.2"),
+            HOMEKIT_CHARACTERISTIC(IDENTIFY, NULL),
+            NULL
+        }),
+        HOMEKIT_SERVICE(SWITCH, .primary=true, .characteristics = (homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
+            HOMEKIT_CHARACTERISTIC(NAME, "id2_switch1"),
+            NULL
+        }),
+        HOMEKIT_SERVICE(SWITCH, .primary=false, .characteristics = (homekit_characteristic_t*[]) {
+            HOMEKIT_CHARACTERISTIC(ON, false, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback)),
+            HOMEKIT_CHARACTERISTIC(NAME, "id2_switch2"),
             NULL
         }),
         NULL
