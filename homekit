@@ -10,10 +10,17 @@ export SDK_PATH="~/git/homekit/esp-open-rtos/"
 export ESPPORT=/dev/tty.SLAB_USBtoUART
 NAME=${PWD##*/}
 
-while getopts ":efmrx:" opt; do
+while getopts ":efmrx" opt; do
   case $opt in
     x)
-      NAME=$OPTARG
+      echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"
+      rm -R ./build
+      rm -R ./firmware
+      echo -e "${ORANGE}building project${NOCOLOR}"
+      cd ../../
+      docker run -it --rm -v "$(pwd)":/project -w /project esp-rtos make -C amaider_examples/$NAME all
+      echo -e "${ORANGE}flash with monitor${NOCOLOR}"
+      make -C ../../amaider_examples/$NAME flash monitor
       ;;
     r)
       echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"
@@ -44,7 +51,5 @@ while getopts ":efmrx:" opt; do
       echo "Option -$OPTARG requires an argument." >&2
       exit 1
       ;;
-    e)
-
   esac
 done
