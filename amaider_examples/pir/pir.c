@@ -6,6 +6,7 @@
 #include <homekit/homekit.h>
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
+
 #include "../../esp-homekit-demo/components/common/button/toggle.h"
 
 #define debug(fmt, ...) printf("%s" fmt "\n", "pir.c: ", ## __VA_ARGS__);

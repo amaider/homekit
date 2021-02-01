@@ -19,8 +19,17 @@ while getopts ":efmrx" opt; do
       echo -e "${ORANGE}building project${NOCOLOR}"
       cd ../../
       docker run -it --rm -v "$(pwd)":/project -w /project esp-rtos make -C amaider_examples/$NAME all
+      echo -e "${ORANGE}ls1${NOCOLOR}"
+      ls
+      cd ./amaider_examples/
+      echo -e "${ORANGE}ls2${NOCOLOR}"
+      ls
+      echo -e $NAME
+      cd ./$NAME
+      ls
       echo -e "${ORANGE}flash with monitor${NOCOLOR}"
-      make -C ../../amaider_examples/$NAME flash monitor
+      cd ./amaider_examples/$NAME
+      make -C /amaider_examples/$NAME flash monitor
       ;;
     r)
       echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"

@@ -19,9 +19,9 @@
 #include "i2c/i2c.h"
 #include "bmp280/bmp280.h"
 
-const uint8_t i2c_bus = 0;
-const uint8_t scl_pin = 5;
-const uint8_t sda_pin = 4;
+#define I2C_BUS 0
+#define SCL_PIN 5
+#define SDA_PIN 4
 
 float temperature_value, pressure_value, humidity_value;
 
@@ -34,7 +34,7 @@ void bmp280_sensor_task(void *pvParameters) {
     bmp280_init_default_params(&params);
 
     bmp280_t bmp280_dev;
-    bmp280_dev.i2c_dev.bus = i2c_bus;
+    bmp280_dev.i2c_dev.bus = I2C_BUS;
     bmp280_dev.i2c_dev.addr = BMP280_I2C_ADDRESS_0;
 
     while (1) {
@@ -43,7 +43,7 @@ void bmp280_sensor_task(void *pvParameters) {
             vTaskDelay(1000 / portTICK_PERIOD_MS);
         }
         while(1) {
-            vTaskDelay(1000 / portTICK_PERIOD_MS);
+            vTaskDelay(500 / portTICK_PERIOD_MS);
             if (!bmp280_read_float(&bmp280_dev, &temperature_value, &pressure_value, &humidity_value)) {
                 debug("Temperature/pressure reading failed\n");
                 break;
@@ -53,7 +53,7 @@ void bmp280_sensor_task(void *pvParameters) {
             humidity.value.float_value = humidity_value;
             homekit_characteristic_notify(&temperature, HOMEKIT_FLOAT(temperature_value));
             homekit_characteristic_notify(&humidity, HOMEKIT_FLOAT(humidity_value));
-            vTaskDelay(3000 / portTICK_PERIOD_MS);
+            vTaskDelay(4500 / portTICK_PERIOD_MS);
         }
     }
 }
@@ -109,6 +109,6 @@ homekit_server_config_t config = {
 void user_init(void) {
     wifi_init();
     homekit_server_init(&config);
-    i2c_init(i2c_bus, scl_pin, sda_pin, I2C_FREQ_400K);
+    i2c_init(I2C_BUS, SCL_PIN, SDA_PIN, I2C_FREQ_400K);
     xTaskCreate(bmp280_sensor_task, "Temperatore Sensor", 256, NULL, 2, NULL);
 }
