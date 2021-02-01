@@ -49,3 +49,8 @@ void pir_init() {
 
 pir_init();
 ```
+
+# Makefile
+```c
+$(abspath ../../esp-homekit-demo/components/common/button) \
+```

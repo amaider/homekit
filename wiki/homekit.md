@@ -58,3 +58,19 @@ wifi_config_init("amaider - LED Tiles ", NULL, on_wifi_ready);  //replace NULL w
 wifi_init();
 homekit_server_init(&config);
 ```
+
+# Makefile
+```c
+extras/i2c \
+
+extras/bmp280 \
+
+extras/ssd1306 \
+extras/fonts \
+
+extras/i2s_dma \
+extras/ws2812_i2s \
+
+$(abspath ../../esp-homekit-demo/components/esp8266-open-rtos/wifi_config) \    // for AP Wifi
+$(abspath ../../esp-homekit-demo/components/common/button) \    // for occupancy detector
+```
