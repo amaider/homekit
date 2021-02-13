@@ -10,7 +10,15 @@
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
 
-#define debug(fmt, ...) printf("%s" fmt "\n", "template.c: ", ## __VA_ARGS__);
+/* Serial print use: debug("%s: <your print here>", __func__); */
+#if 1
+#define debug(fmt, ...) printf("%s" fmt "\n", "pir.c: ", ## __VA_ARGS__);
+#define CHECKBOX    "\t\xe2\x98\x90"
+#define SUCCESSFUL  "\t\xe2\x9c\x93"
+#define FAILED      "\t\xe2\x9c\x95"
+#else
+#define debug(fmt, ...)
+#endif
 
 /*
  * null_identify
