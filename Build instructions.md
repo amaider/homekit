@@ -76,7 +76,7 @@ export ESPPORT=/dev/tty.SLAB_USBtoUART
 ```
 To find out what is the name of your USB device to put to ESPPORT environment variable, first do `ls /dev/tty.*` before you connect your ESP8266 to USB, then do same command after you have connected it to USB and notice which new device has appeared.
 
-10. Copy wifi.h.sample -> wifi.h and edit it with correct WiFi SSID and password.
+10. Copy wifi.h.sample -> wifi.h and edit it with correct WiFi SSID and password. And add HUE_BRIDGE_IP, HUE_USER_API
 11. [Configure settings](https://github.com/maximkulkin/esp-homekit-demo/wiki/Configuration)
 12. To build an example", first change into `esp-homekit-demo` directory (into it's root directory:
 ```shell
