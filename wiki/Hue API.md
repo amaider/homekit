@@ -1,4 +1,4 @@
-# TEMPLATE
+# Hue API
 
 ## #include
 ```c
