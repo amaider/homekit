@@ -1,4 +1,4 @@
-PROGRAM = philips_hue
+PROGRAM = hue_api
 
 EXTRA_COMPONENTS = \
 	extras/http-parser \

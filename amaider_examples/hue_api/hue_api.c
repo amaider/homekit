@@ -12,7 +12,7 @@
 
 /* Serial print use: debug("%s: <your print here>", __func__); */
 #if 1
-#define debug(fmt, ...) printf("%s" fmt "\n", "philips_hue.c: ", ## __VA_ARGS__);
+#define debug(fmt, ...) printf("%s" fmt "\n", "hue_api.c: ", ## __VA_ARGS__);
 #define CHECKBOX    "\t\xe2\x98\x90"
 #define SUCCESSFUL  "\t\xe2\x9c\x93"
 #define FAILED      "\t\xe2\x9c\x95"
@@ -172,7 +172,7 @@ void light_bri_callback(homekit_characteristic_t *ch, homekit_value_t value, voi
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_lightbulb, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
-            HOMEKIT_CHARACTERISTIC(NAME, "philips_hue"),
+            HOMEKIT_CHARACTERISTIC(NAME, "hue_api"),
             HOMEKIT_CHARACTERISTIC(MANUFACTURER, "amaider"),
             HOMEKIT_CHARACTERISTIC(SERIAL_NUMBER, "001"),
             HOMEKIT_CHARACTERISTIC(MODEL, "NodeMCU 1.0"),
