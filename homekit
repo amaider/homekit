@@ -7,11 +7,13 @@ ORANGE='\033[0;33m'     #	${ORANGE}
 GREEN='\033[0;32m'      #	${GREEN}
 
 export SDK_PATH="~/git/homekit/esp-open-rtos/"
-#export ESPPORT=/dev/tty.SLAB_USBtoUART
-export ESPPORT=/dev/tty.usbserial-1D1120
+
+export ESPPORT=/dev/tty.SLAB_USBtoUART
+#export ESPPORT=/dev/tty.usbserial-1D1120
 #export ESPPORT=/dev/tty.usbserial-1D1130
 #export ESPPORT=/dev/tty.usbserial-1D1140
 #export ESPPORT=/dev/tty.usbserial-1A1240
+
 NAME=${PWD##*/}
 
 while getopts ":efmrx" opt; do
@@ -36,6 +38,10 @@ while getopts ":efmrx" opt; do
     m)
       echo -e "${ORANGE}monitor${NOCOLOR}"
       make -C ../../amaider_examples/$NAME monitor
+      ;;
+    h)
+      echo -e "${ORANGE}nano /bin/homekit/${NOCOLOR}"
+      nano /bin/homekit/
       ;;
     \?)
       echo "Invalid option: -$OPTARG" >&2
