@@ -1,9 +1,10 @@
 # Build instructions ESP8266 (Docker)
 
 * [Build instructions ESP8266 (Docker)](https://github.com/amaider/homekit/blob/master/Build%20instructions.md)
+* cd /homekit/esp-homekit-demo/components/  
+```git clone --recursive https://github.com/maximkulkin/esp-ir.git ```
 
 # homekit commands:
-    -x: run and flash 
     -r: run
     -e: erase_flash
     -f: flash

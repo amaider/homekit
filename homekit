@@ -7,30 +7,15 @@ ORANGE='\033[0;33m'     #	${ORANGE}
 GREEN='\033[0;32m'      #	${GREEN}
 
 export SDK_PATH="~/git/homekit/esp-open-rtos/"
-export ESPPORT=/dev/tty.SLAB_USBtoUART
+#export ESPPORT=/dev/tty.SLAB_USBtoUART
+export ESPPORT=/dev/tty.usbserial-1D1120
+#export ESPPORT=/dev/tty.usbserial-1D1130
+#export ESPPORT=/dev/tty.usbserial-1D1140
+#export ESPPORT=/dev/tty.usbserial-1A1240
 NAME=${PWD##*/}
 
 while getopts ":efmrx" opt; do
   case $opt in
-    x)
-      echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"
-      rm -R ./build
-      rm -R ./firmware
-      echo -e "${ORANGE}building project${NOCOLOR}"
-      cd ../../
-      docker run -it --rm -v "$(pwd)":/project -w /project esp-rtos make -C amaider_examples/$NAME all
-      echo -e "${ORANGE}ls1${NOCOLOR}"
-      ls
-      cd ./amaider_examples/
-      echo -e "${ORANGE}ls2${NOCOLOR}"
-      ls
-      echo -e $NAME
-      cd ./$NAME
-      ls
-      echo -e "${ORANGE}flash with monitor${NOCOLOR}"
-      cd ./amaider_examples/$NAME
-      make -C /amaider_examples/$NAME flash monitor
-      ;;
     r)
       echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"
       rm -R ./build
