@@ -16,7 +16,7 @@ export ESPPORT=/dev/tty.SLAB_USBtoUART
 
 NAME=${PWD##*/}
 
-while getopts ":efmrx" opt; do
+while getopts ":efmhrx" opt; do
   case $opt in
     r)
       echo -e "${GREEN}remove build/firmware folders${NOCOLOR}"
