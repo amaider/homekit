@@ -9,7 +9,10 @@
 
 #include "../../esp-homekit-demo/components/common/button/toggle.h"
 
-#define debug(fmt, ...) printf("%s" fmt "\n", "pir.c: ", ## __VA_ARGS__);
+/** Serial print use: DEBUG("%s: your_print_here", __FILENAME__); */
+#include <string.h>
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define DEBUG(message, ...) printf("%s: " message "\n", __func__, ##__VA_ARGS__)fmt "\n", "pir.c: ", ## __VA_ARGS__);
 
 /*
  * PIR Sensor

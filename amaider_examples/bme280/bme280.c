@@ -11,7 +11,10 @@
 #include "../../esp-homekit-demo/wifi.h"
 
 
-#define debug(fmt, ...) printf("%s" fmt "\n", "bme280.c: ", ## __VA_ARGS__);
+/** Serial print use: DEBUG("%s: your_print_here", __FILENAME__); */
+#include <string.h>
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define DEBUG(message, ...) printf("%s: " message "\n", __func__, ##__VA_ARGS__)
 
 /*
  * BME280
