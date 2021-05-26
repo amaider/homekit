@@ -10,19 +10,12 @@
 #include <homekit/characteristics.h>
 #include "../../esp-homekit-demo/wifi.h"
 
-/* Serial print use: debug("%s: <your print here>", __func__); */
-#if 1
-#define debug(fmt, ...) printf("%s" fmt "\n", "pir.c: ", ## __VA_ARGS__);
-#define CHECKBOX    "\t\xe2\x98\x90"
-#define SUCCESSFUL  "\t\xe2\x9c\x93"
-#define FAILED      "\t\xe2\x9c\x95"
-#else
-#define debug(fmt, ...)
-#endif
+/** Serial print use: DEBUG("%s: your_print_here", __FILENAME__); */
+#include <string.h>
+#define __FILENAME__ (strrchr(__FILE__, '/') ? strrchr(__FILE__, '/') + 1 : __FILE__)
+#define DEBUG(message, ...) printf("%s: " message "\n", __func__, ##__VA_ARGS__)
 
-/*
- * null_identify
- */
+/** null_identify */
 #define LED_GPIO 2
 void null_identify_task(void *_args) {
     for (int i=0; i<3; i++) {
@@ -43,21 +36,18 @@ void template_identify(homekit_value_t _value) {
     xTaskCreate(null_identify_task, "LED identify", 128, NULL, 2, NULL);
 }
 
-/*
- * Switch
- */
+/** Switch */
 homekit_characteristic_t characteristic;
 
-void switch_on_callback(homekit_characteristic_t *ch, homekit_value_t value, void *arg) {
+void switch_on_callback(homekit_characteristic_t *ch, homekit_value_t value, void *context) {
+    printf("button %s callback", (char *)context);
     homekit_characteristic_notify(&characteristic, HOMEKIT_INT(value.int_value));
     debug("%s: ", __func__);
 }
 
-homekit_characteristic_t characteristic = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 100, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback));
+homekit_characteristic_t characteristic = HOMEKIT_CHARACTERISTIC_(BRIGHTNESS, 100, .callback=HOMEKIT_CHARACTERISTIC_CALLBACK(switch_on_callback, .context=(void*)"button1"));
 
-/*
- * homekit accessories
- */
+/** homekit accessories */
 homekit_accessory_t *accessories[] = {
     HOMEKIT_ACCESSORY(.id=1, .category=homekit_accessory_category_template, .services=(homekit_service_t*[]){
         HOMEKIT_SERVICE(ACCESSORY_INFORMATION, .characteristics=(homekit_characteristic_t*[]){
@@ -79,9 +69,7 @@ homekit_accessory_t *accessories[] = {
     NULL
 };
 
-/*
- * inits
- */
+/** inits */
 static void wifi_init() {
     struct sdk_station_config wifi_config = {
         .ssid = WIFI_SSID,
